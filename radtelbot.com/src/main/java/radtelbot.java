@@ -37,13 +37,6 @@ public class radtelbot extends TelegramLongPollingBot{
 
         if(command.equals("/start")){
 
-            System.out.println("Display your username-> /name");
-            System.out.println("Display your lastname-> /lastname");
-            System.out.println("Display your fullname-> /fullname");
-            System.out.println("Display your help-> /name");
-
-
-            message.setText("To control the bot use the following commands:");
             message.setText("To control the bot use the following commands: \n" +
                     "Display your username-> \"/name\"\n" +
                     "Display your lastname-> /lastname\n" +
@@ -56,8 +49,8 @@ public class radtelbot extends TelegramLongPollingBot{
 //            }
 
             String s = command_list.toString();
-            message.setText( s );
 //            message.setText( s );
+////            message.setText( s );
 
         }
 
@@ -71,7 +64,7 @@ public class radtelbot extends TelegramLongPollingBot{
         if(command.equals("/lastname")){
 
             if (update.getMessage().getFrom().getLastName() ==null){
-                message.setText("no last name");
+                message.setText("no last name, are you trying to be anonymous? :)");
                 System.out.println("no last name");
 
             }
@@ -82,7 +75,6 @@ public class radtelbot extends TelegramLongPollingBot{
 
             }
 
-
         }
 
         if (command.equals("/fullname")){
@@ -92,7 +84,7 @@ public class radtelbot extends TelegramLongPollingBot{
 
         if (command.equals("/help")){
 
-            // To Do
+            message.setText("How can I help you?");
         }
 
         message.setChatId(String.valueOf(update.getMessage().getChatId()));
