@@ -25,11 +25,11 @@ public class radtelbot extends TelegramLongPollingBot{
 
         SendMessage message = new SendMessage();
 
-//        LinkedHashMap<String, String> command_list =
-////                new LinkedHashMap<String, String>();
-////        command_list.put("Display your username", "/name");
-////        command_list.put("Display your fullname", "/fullname");
-////        command_list.put("For help", "/help");
+        LinkedHashMap<String, String> command_list =
+                new LinkedHashMap<String, String>();
+        command_list.put("Display your username", "/name");
+        command_list.put("Display your fullname", "/fullname");
+        command_list.put("For help", "/help");
 
 
         System.out.println("Welcome message");
@@ -37,20 +37,27 @@ public class radtelbot extends TelegramLongPollingBot{
 
         if(command.equals("/start")){
 
+            System.out.println("Display your username-> /name");
+            System.out.println("Display your lastname-> /lastname");
+            System.out.println("Display your fullname-> /fullname");
+            System.out.println("Display your help-> /name");
 
 
             message.setText("To control the bot use the following commands:");
+            message.setText("To control the bot use the following commands: \n" +
+                    "Display your username-> \"/name\"\n" +
+                    "Display your lastname-> /lastname\n" +
+                    "Display your fullname-> /fullname\n" +
+                    "Display your help-> /help");
 //            Iterator iterator = command_list.entrySet().iterator();
 //            while (iterator.hasNext()) {
 //                command_list.ntry me2 = (command_list.Entry) iterator.next();
 //                System.out.println("Key: "+me2.getKey() + " & Value: " + me2.getValue());
 //            }
 
-            message.setText( "Display your username-> /name ");
-            message.setText( "Display your lastname-> /lastname");
-            System.out.println('d');
-            message.setText( "Display your fullname-> /fullname");
-            message.setText( "Display your help-> /help");
+            String s = command_list.toString();
+            message.setText( s );
+//            message.setText( s );
 
         }
 
@@ -59,6 +66,23 @@ public class radtelbot extends TelegramLongPollingBot{
             System.out.println(update.getMessage().getFrom().getFirstName());
 
             message.setText(update.getMessage().getFrom().getFirstName());
+        }
+
+        if(command.equals("/lastname")){
+
+            if (update.getMessage().getFrom().getLastName() ==null){
+                message.setText("no last name");
+                System.out.println("no last name");
+
+            }
+
+            else{
+                message.setText(update.getMessage().getFrom().getLastName());
+                System.out.println(update.getMessage().getFrom().getLastName());
+
+            }
+
+
         }
 
         if (command.equals("/fullname")){
@@ -81,3 +105,4 @@ public class radtelbot extends TelegramLongPollingBot{
         }
     }
 }
+
