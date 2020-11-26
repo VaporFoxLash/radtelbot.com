@@ -37,10 +37,6 @@ public class radtelbot extends TelegramLongPollingBot{
 
         if(command.equals("/start")){
 
-            System.out.println("Display your username-> /name");
-            System.out.println("Display your lastname-> /lastname");
-            System.out.println("Display your fullname-> /fullname");
-            System.out.println("Display your help-> /name");
 
 
             message.setText("To control the bot use the following commands:");
@@ -50,8 +46,10 @@ public class radtelbot extends TelegramLongPollingBot{
 //                System.out.println("Key: "+me2.getKey() + " & Value: " + me2.getValue());
 //            }
 
-//            String s = command_list.toString();
-//            message.setText( s );
+            message.setText( "Display your username-> /name ");
+            message.setText( "Display your lastname-> /lastname");
+            message.setText( "Display your fullname-> /fullname");
+            message.setText( "Display your help-> /help");
 
         }
 
