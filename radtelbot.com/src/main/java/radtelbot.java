@@ -25,11 +25,11 @@ public class radtelbot extends TelegramLongPollingBot{
 
         SendMessage message = new SendMessage();
 
-        LinkedHashMap<String, String> command_list =
-                new LinkedHashMap<String, String>();
-        command_list.put("Display your username", "/name");
-        command_list.put("Display your fullname", "/fullname");
-        command_list.put("For help", "/help");
+//        LinkedHashMap<String, String> command_list =
+////                new LinkedHashMap<String, String>();
+////        command_list.put("Display your username", "/name");
+////        command_list.put("Display your fullname", "/fullname");
+////        command_list.put("For help", "/help");
 
 
         System.out.println("Welcome message");
@@ -50,8 +50,8 @@ public class radtelbot extends TelegramLongPollingBot{
 //                System.out.println("Key: "+me2.getKey() + " & Value: " + me2.getValue());
 //            }
 
-            String s = command_list.toString();
-            message.setText( s );
+//            String s = command_list.toString();
+//            message.setText( s );
 
         }
 
