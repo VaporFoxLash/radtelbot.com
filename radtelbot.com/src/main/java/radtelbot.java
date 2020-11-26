@@ -37,13 +37,11 @@ public class radtelbot extends TelegramLongPollingBot{
 
         if(command.equals("/start")){
 
-            System.out.println("Display your username-> /name");
-            System.out.println("Display your lastname-> /lastname");
-            System.out.println("Display your fullname-> /fullname");
-            System.out.println("Display your help-> /name");
-
-
-            message.setText("To control the bot use the following commands:");
+            message.setText("To control the bot use the following commands: \n" +
+                    "Display your username-> \"/name\"\n" +
+                    "Display your lastname-> /lastname\n" +
+                    "Display your fullname-> /fullname\n" +
+                            "Display your help-> /help");
 //            Iterator iterator = command_list.entrySet().iterator();
 //            while (iterator.hasNext()) {
 //                command_list.ntry me2 = (command_list.Entry) iterator.next();
@@ -51,7 +49,7 @@ public class radtelbot extends TelegramLongPollingBot{
 //            }
 
             String s = command_list.toString();
-            message.setText( s );
+//            message.setText( s );
 
         }
 
