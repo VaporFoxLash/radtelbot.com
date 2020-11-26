@@ -48,6 +48,7 @@ public class radtelbot extends TelegramLongPollingBot{
 
             message.setText( "Display your username-> /name ");
             message.setText( "Display your lastname-> /lastname");
+            System.out.println('d');
             message.setText( "Display your fullname-> /fullname");
             message.setText( "Display your help-> /help");
 
