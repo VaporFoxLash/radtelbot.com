@@ -4,15 +4,33 @@ import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class radtelbot extends TelegramLongPollingBot{
 
+interface myBotInterface {
+    HashMap command_list = new  HashMap<>();
+    static void addCommands(){
+        command_list.put("Display your username", "/name");
+        command_list.put("Display your fullname", "/fullname");
+        command_list.put("For help", "/help");
+    }
 
-    public String getBotUsername() {
+    static String getBotUsername() {
         return "RadteleBot";
     }
+
+    static String getBotToken() {
+        return "1486539422:AAH2Po2rRY--tVsizLegJXlcO0KJ-2I5s38";
+    }
+}
+
+public class radtelbot extends TelegramLongPollingBot implements myBotInterface{
+
+
+    myBotInterface.getBotUsername();
 
     public String getBotToken() {
         return "1486539422:AAH2Po2rRY--tVsizLegJXlcO0KJ-2I5s38";
@@ -25,14 +43,11 @@ public class radtelbot extends TelegramLongPollingBot{
 
         SendMessage message = new SendMessage();
 
-        LinkedHashMap<String, String> command_list =
-                new LinkedHashMap<String, String>();
-        command_list.put("Display your username", "/name");
-        command_list.put("Display your fullname", "/fullname");
-        command_list.put("For help", "/help");
-
 
         System.out.println("Welcome message");
+//        command_list.entrySet().forEach( entry -> {
+//            System.out.println( entry.getKey() + " => " + entry.getValue() );
+//        });
 
 
         if(command.equals("/start")){
@@ -48,7 +63,7 @@ public class radtelbot extends TelegramLongPollingBot{
 //                System.out.println("Key: "+me2.getKey() + " & Value: " + me2.getValue());
 //            }
 
-            String s = command_list.toString();
+//            String s = command_list.toString();
 //            message.setText( s );
 ////            message.setText( s );
 
