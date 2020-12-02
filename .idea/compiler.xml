@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="radtelbot.com" />
+        <module name="radtelebot" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="radtelbot.com" target="1.5" />
+      <module name="radtelebot" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
