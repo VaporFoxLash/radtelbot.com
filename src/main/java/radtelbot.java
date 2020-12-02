@@ -116,20 +116,24 @@ public class radtelbot extends TelegramLongPollingBot implements myBotInterface{
                     "Get a quick wikisearch-> /wiki_search");
         }
 
+        //command to get user first name
         if(command.equals("/name")){
             sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName());
         }
 
+        //command to get user last name
         if(command.equals("/lastname")){
             sendMsg(update, chat_id, update.getMessage().getFrom().getLastName());
         }
 
+        //command to get user full name
         if (command.equals("/fullname")){
             sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName()+" "
                             +update.getMessage().getFrom().getLastName());
         }
 
 
+        //command to get objects to search on wikipedia, with buttons assign to each object
         if (command.equals("/wiki_search")){
             SendMessage messag = new SendMessage() // Create a message object object
                     .setChatId(chat_id)
@@ -140,7 +144,7 @@ public class radtelbot extends TelegramLongPollingBot implements myBotInterface{
             List<KeyboardRow> keyboard = new ArrayList<>();
             // Create a keyboard row
             KeyboardRow row = new KeyboardRow();
-            // Set each button, you can also use KeyboardButton objects if you need something else than text
+            // Set each button
             row.add("Java");
             row.add("OOP");
             row.add("Polymorphism");
@@ -166,26 +170,32 @@ public class radtelbot extends TelegramLongPollingBot implements myBotInterface{
             }
         }
 
+        //command to get Wikipedia page for Java
         if (command.equals("Java")){
             sendMsg(update, chat_id, searchWiki("Java programming"));
         }
 
+        //command to get Wikipedia page for OOP
         if (command.equals("OOP")){
             sendMsg(update, chat_id, searchWiki("Object-oriented programming"));
         }
 
+        //command to get Wikipedia page for polymorphism
         if (command.equals("Polymorphism")){
             sendMsg(update, chat_id, searchWiki("Polymorphism (computer science)"));
         }
 
+        //command to get Wikipedia page for
         if (command.equals("Inheritance")){
             sendMsg(update, chat_id, searchWiki("Inheritance (object-oriented programming)"));
         }
 
+        //command to get Wikipedia page for Encapsulation
         if (command.equals("Encapsulation")){
             sendMsg(update, chat_id, searchWiki("Encapsulation (computer programming)"));
         }
 
+        //command to get back to home and make it easy to navigate
         if (command.equals("Home")){
             sendMsg(update, chat_id, "Welcome, to get started type /start");
         }
