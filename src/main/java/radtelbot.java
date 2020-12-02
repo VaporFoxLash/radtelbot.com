@@ -55,8 +55,8 @@ public class radtelbot extends TelegramLongPollingBot{
 //                System.out.println("Key: "+me2.getKey() + " & Value: " + me2.getValue());
 //            }
 
-//            String s = command_list.toString();
-//            message.setText( s );
+            String s = command_list.toString();
+            message.setText( s );
 //            message.setText( s );
 
         }
