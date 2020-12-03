@@ -25,7 +25,9 @@ Open the project with intellij IDEA, build and run it.
 
 
 ## <a name="Testing">Testing</a>
-
+Open the project with intellij IDEA, in src/test/java/radtelbot.java you click on Run radtelBotTest button.
+for testing myBotInterface click on Run myBotInterfaceTest button in Intellji IDE.
+and you can see the result on terminal.
 
 
 ## <a name="References">References</a>
