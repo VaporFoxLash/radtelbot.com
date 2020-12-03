@@ -22,10 +22,10 @@ Telegrambots, version 3.5
 
 ## <a name="Usage">Usage</a>
 Open the project with intellij IDEA, build and run it.
-Search @radtelebot on telegram and start interacting with the bot.
 
 
-## <a name="Testing">Running the tests</a>
+## <a name="Testing"></a>
+added unittesting for radtelbot and myBotInterface classes by Junit
 
 
 ## <a name="References">References</a>
