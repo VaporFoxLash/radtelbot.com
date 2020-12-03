@@ -25,7 +25,7 @@ Open the project with intellij IDEA, build and run it.
 
 
 ## <a name="Testing">Testing</a>
-added unittesting for radtelbot and myBotInterface classes by Junit
+
 
 
 ## <a name="References">References</a>
