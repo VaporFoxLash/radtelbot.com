@@ -10,25 +10,23 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+/**
+ * Telegram bot
+ * @author Radebe Donald
+ * @author Rayan Tamim
+ * @version 1.0
+ * @since 23.11.2020
+ */
 
-interface myBotInterface {
-    HashMap command_list = new  HashMap<>();
-    static HashMap addCommands(){
-        command_list.put("Display your username", "/name");
-        command_list.put("Display your fullname", "/fullname");
-        command_list.put("For help", "/help");
-        return command_list;
-    }
 
-}
-
-public class radtelbot extends TelegramLongPollingBot implements myBotInterface{
+public class radtelbot extends TelegramLongPollingBot implements Commands{
 
     /**
      * Method for creating a message and sending it.
@@ -44,6 +42,20 @@ public class radtelbot extends TelegramLongPollingBot implements myBotInterface{
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void addMap(String def, String cmd){
+        command_map.put(def, cmd);
+    }
+
+    /**
+     * This method takes an array of commands and add them to the command_list arraylist.
+     * @param cmd
+     */
+    @Override
+    public void addCommand(String[] cmd) {
+        Collections.addAll(command_list, cmd);
     }
 
     /**
@@ -64,7 +76,114 @@ public class radtelbot extends TelegramLongPollingBot implements myBotInterface{
         return "1486539422:AAH2Po2rRY--tVsizLegJXlcO0KJ-2I5s38";
     }
 
-    public String searchWiki(String subject){
+
+    /**
+     * Method for receiving messages.
+     * @param update Contains a message from the user.
+     */
+    @Override
+    public void onUpdateReceived(Update update) {
+
+        String command=update.getMessage().getText();
+
+        SendMessage message = new SendMessage();
+
+        long chat_id = update.getMessage().getChatId();
+
+        addMap("For help", "/start");
+        addMap("Display your username-->", "/name");
+        addMap("Display your fullname-->", "/fullname");
+        addMap("For wiki search", "/wiki_search");
+
+        String[] cmd = {"/start", "/name", "/lastname", "/fullname", "/wiki_search",
+                "Java", "OOP", "Polymorphism", "Inheritance", "Encapsulation", "Home"};
+        addCommand(cmd);
+
+        switch(command_list.indexOf(command)) {
+            case 0:
+                ArrayList<String> details = new ArrayList<>();
+                for (Map.Entry<String, String> entry : command_map.entrySet()) {
+                    details.add(entry.getKey() + " ----> " + entry.getValue());
+                }
+                sendMsg(update, chat_id, "To control the bot use the following commands: \n" +
+                        details.get(0)+"\n" +
+                        details.get(1)+"\n" +
+                        details.get(2)+"\n" +
+                        details.get(3));
+                break;
+            case 1:
+                sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName());
+                break;
+            case 2:
+                sendMsg(update, chat_id, update.getMessage().getFrom().getLastName());
+                break;
+            case 3:
+                sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName()+" "
+                        +update.getMessage().getFrom().getLastName());
+                break;
+            case 4:
+                SendMessage messag = new SendMessage() // Create a message object object
+                        .setChatId(chat_id)
+                        .setText("Select what to search from wikipedia");
+                // Create ReplyKeyboardMarkup object
+                ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+                // Create the keyboard (list of keyboard rows)
+                List<KeyboardRow> keyboard = new ArrayList<>();
+                // Create a keyboard row
+                KeyboardRow row = new KeyboardRow();
+                // Set each button
+                row.add("Java");
+                row.add("OOP");
+                row.add("Polymorphism");
+                // Add the first row to the keyboard
+                keyboard.add(row);
+                // Create another keyboard row
+                row = new KeyboardRow();
+                // Set each button for the second line
+                row.add("Inheritance");
+                row.add("Encapsulation");
+                row.add("Home");
+                // Add the second row to the keyboard
+                keyboard.add(row);
+                // Set the keyboard to the markup
+                keyboardMarkup.setKeyboard(keyboard);
+                messag.setReplyMarkup(keyboardMarkup);
+
+                try {
+                    sendMessage(messag);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case 5:
+                sendMsg(update, chat_id, searchWiki("Java programming"));
+                break;
+            case 7:
+                sendMsg(update, chat_id, searchWiki("Object-oriented programming"));
+                break;
+            case 8:
+                sendMsg(update, chat_id, searchWiki("Polymorphism (computer science)"));
+                break;
+            case 9:
+                sendMsg(update, chat_id, searchWiki("Inheritance (object-oriented programming)"));
+            case 10:
+                sendMsg(update, chat_id, searchWiki("Encapsulation (computer programming)"));
+            case 11:
+                sendMsg(update, chat_id, "Welcome, to get started type /start");
+            default:
+                sendMsg(update, chat_id, "Not a valid command, type /start");
+        }
+
+        message.setChatId(String.valueOf(update.getMessage().getChatId()));
+
+    }
+
+    /**
+     * Method for taking a string to search in wikipedia and return results
+     * @param subject The String that we use as key to search.
+     */
+    @Override
+    public String searchWiki(String subject) {
         URL url = null;
         try {
             url = new URL("https://en.wikipedia.org/w/index.php?action=raw&title=" + subject.replace(" ", "_"));
@@ -91,122 +210,6 @@ public class radtelbot extends TelegramLongPollingBot implements myBotInterface{
             e.printStackTrace();
         }
         return text + "\n link:"+url;
-    }
-
-
-    /**
-     * Method for receiving messages.
-     * @param update Contains a message from the user.
-     */
-    @Override
-    public void onUpdateReceived(Update update) {
-
-        String command=update.getMessage().getText();
-
-        SendMessage message = new SendMessage();
-
-        long chat_id = update.getMessage().getChatId();
-
-
-        if(command.equals("/start")){
-            sendMsg(update, chat_id, "To control the bot use the following commands: \n" +
-                    "Display your username-> \"/name\"\n" +
-                    "Display your lastname-> /lastname\n" +
-                    "Display your fullname-> /fullname\n" +
-                    "Get a quick wikisearch-> /wiki_search");
-        }
-
-        //command to get user first name
-        if(command.equals("/name")){
-            sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName());
-        }
-
-        //command to get user last name
-        if(command.equals("/lastname")){
-            sendMsg(update, chat_id, update.getMessage().getFrom().getLastName());
-        }
-
-        //command to get user full name
-        if (command.equals("/fullname")){
-            sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName()+" "
-                            +update.getMessage().getFrom().getLastName());
-        }
-
-
-        //command to get objects to search on wikipedia, with buttons assign to each object
-        if (command.equals("/wiki_search")){
-            SendMessage messag = new SendMessage() // Create a message object object
-                    .setChatId(chat_id)
-                    .setText("Select what to search from wikipedia");
-            // Create ReplyKeyboardMarkup object
-            ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-            // Create the keyboard (list of keyboard rows)
-            List<KeyboardRow> keyboard = new ArrayList<>();
-            // Create a keyboard row
-            KeyboardRow row = new KeyboardRow();
-            // Set each button
-            row.add("Java");
-            row.add("OOP");
-            row.add("Polymorphism");
-            // Add the first row to the keyboard
-            keyboard.add(row);
-            // Create another keyboard row
-            row = new KeyboardRow();
-            // Set each button for the second line
-            row.add("Inheritance");
-            row.add("Encapsulation");
-            row.add("Home");
-            // Add the second row to the keyboard
-            keyboard.add(row);
-            // Set the keyboard to the markup
-            keyboardMarkup.setKeyboard(keyboard);
-
-            messag.setReplyMarkup(keyboardMarkup);
-
-            try {
-                sendMessage(messag);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //command to get Wikipedia page for Java
-        if (command.equals("Java")){
-            sendMsg(update, chat_id, searchWiki("Java programming"));
-        }
-
-        //command to get Wikipedia page for OOP
-        if (command.equals("OOP")){
-            sendMsg(update, chat_id, searchWiki("Object-oriented programming"));
-        }
-
-        //command to get Wikipedia page for polymorphism
-        if (command.equals("Polymorphism")){
-            sendMsg(update, chat_id, searchWiki("Polymorphism (computer science)"));
-        }
-
-        //command to get Wikipedia page for
-        if (command.equals("Inheritance")){
-            sendMsg(update, chat_id, searchWiki("Inheritance (object-oriented programming)"));
-        }
-
-        //command to get Wikipedia page for Encapsulation
-        if (command.equals("Encapsulation")){
-            sendMsg(update, chat_id, searchWiki("Encapsulation (computer programming)"));
-        }
-
-        //command to get back to home and make it easy to navigate
-        if (command.equals("Home")){
-            sendMsg(update, chat_id, "Welcome, to get started type /start");
-        }
-
-        message.setChatId(String.valueOf(update.getMessage().getChatId()));
-
-//        try {
-//            execute(message);
-//        } catch (TelegramApiException e) {
-//            e.printStackTrace();
-//        }
     }
 }
 
