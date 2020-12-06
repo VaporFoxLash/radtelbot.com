@@ -91,12 +91,13 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
         long chat_id = update.getMessage().getChatId();
 
         addMap("For help", "/start");
-        addMap("Display your username-->", "/name");
-        addMap("Display your fullname-->", "/fullname");
+        addMap("Display your username>", "/name");
+        addMap("Display your fullname", "/fullname");
         addMap("For wiki search", "/wiki_search");
+        addMap("To test your java and OOP knowledge", "/Trivia");
 
         String[] cmd = {"/start", "/name", "/lastname", "/fullname", "/wiki_search",
-                "Java", "OOP", "Polymorphism", "Inheritance", "Encapsulation", "Home"};
+                "Java", "OOP", "Polymorphism", "Inheritance", "Encapsulation", "/Trivia", "Home"};
         addCommand(cmd);
 
         switch(command_list.indexOf(command)) {
@@ -109,7 +110,8 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
                         details.get(0)+"\n" +
                         details.get(1)+"\n" +
                         details.get(2)+"\n" +
-                        details.get(3));
+                        details.get(3)+"\n" +
+                        details.get(4));
                 break;
             case 1:
                 sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName());
@@ -122,38 +124,7 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
                         +update.getMessage().getFrom().getLastName());
                 break;
             case 4:
-                SendMessage messag = new SendMessage() // Create a message object object
-                        .setChatId(chat_id)
-                        .setText("Select what to search from wikipedia");
-                // Create ReplyKeyboardMarkup object
-                ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-                // Create the keyboard (list of keyboard rows)
-                List<KeyboardRow> keyboard = new ArrayList<>();
-                // Create a keyboard row
-                KeyboardRow row = new KeyboardRow();
-                // Set each button
-                row.add("Java");
-                row.add("OOP");
-                row.add("Polymorphism");
-                // Add the first row to the keyboard
-                keyboard.add(row);
-                // Create another keyboard row
-                row = new KeyboardRow();
-                // Set each button for the second line
-                row.add("Inheritance");
-                row.add("Encapsulation");
-                row.add("Home");
-                // Add the second row to the keyboard
-                keyboard.add(row);
-                // Set the keyboard to the markup
-                keyboardMarkup.setKeyboard(keyboard);
-                messag.setReplyMarkup(keyboardMarkup);
-
-                try {
-                    sendMessage(messag);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+                wikiKeyBoard(chat_id);
                 break;
             case 5:
                 sendMsg(update, chat_id, searchWiki("Java programming"));
@@ -166,16 +137,89 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
                 break;
             case 9:
                 sendMsg(update, chat_id, searchWiki("Inheritance (object-oriented programming)"));
+                break;
             case 10:
                 sendMsg(update, chat_id, searchWiki("Encapsulation (computer programming)"));
+                break;
             case 11:
-                sendMsg(update, chat_id, "Welcome, to get started type /start");
+                triviaVariants(chat_id);
+                break;
             default:
-                sendMsg(update, chat_id, "Not a valid command, type /start");
+                sendMsg(update, chat_id, "Welcome, to get started type /start");
         }
 
         message.setChatId(String.valueOf(update.getMessage().getChatId()));
 
+    }
+
+    public void triviaVariants(long chat_id){
+        SendMessage messag = new SendMessage() // Create a message object object
+                .setChatId(chat_id)
+                .setText("Select what to search from wikipedia");
+        // Create ReplyKeyboardMarkup object
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        // Create the keyboard (list of keyboard rows)
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        // Create a keyboard row
+        KeyboardRow row = new KeyboardRow();
+        // Set each button
+        row.add("Java");
+        row.add("OOP");
+        row.add("Polymorphism");
+        // Add the first row to the keyboard
+        keyboard.add(row);
+        // Create another keyboard row
+        row = new KeyboardRow();
+        // Set each button for the second line
+        row.add("Inheritance");
+        row.add("Encapsulation");
+        row.add("Home");
+        // Add the second row to the keyboard
+        keyboard.add(row);
+        // Set the keyboard to the markup
+        keyboardMarkup.setKeyboard(keyboard);
+        messag.setReplyMarkup(keyboardMarkup);
+
+        try {
+            sendMessage(messag);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void wikiKeyBoard(long chat_id) {
+        SendMessage messag = new SendMessage() // Create a message object object
+                .setChatId(chat_id)
+                .setText("Select what to search from wikipedia");
+        // Create ReplyKeyboardMarkup object
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        // Create the keyboard (list of keyboard rows)
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        // Create a keyboard row
+        KeyboardRow row = new KeyboardRow();
+        // Set each button
+        row.add("Java");
+        row.add("OOP");
+        row.add("Polymorphism");
+        // Add the first row to the keyboard
+        keyboard.add(row);
+        // Create another keyboard row
+        row = new KeyboardRow();
+        // Set each button for the second line
+        row.add("Inheritance");
+        row.add("Encapsulation");
+        row.add("Home");
+        // Add the second row to the keyboard
+        keyboard.add(row);
+        // Set the keyboard to the markup
+        keyboardMarkup.setKeyboard(keyboard);
+        messag.setReplyMarkup(keyboardMarkup);
+
+        try {
+            sendMessage(messag);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -212,4 +256,3 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
         return text + "\n link:"+url;
     }
 }
-
