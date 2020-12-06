@@ -26,7 +26,7 @@ import java.net.URL;
  */
 
 
-public class radtelbot extends TelegramLongPollingBot implements Commands{
+public class Radtelbot extends TelegramLongPollingBot implements Commands{
 
     /**
      * Method for creating a message and sending it.

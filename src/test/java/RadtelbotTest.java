@@ -3,10 +3,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
-class radtelbotTest {
-    private radtelbot bot = new radtelbot();
+class RadtelbotTest {
+    private Radtelbot bot = new Radtelbot();
 
-     @Test
+    @Test
     void test_getUsername() {
         assertEquals("BotName", bot.getBotUsername());
     }
@@ -24,7 +24,8 @@ class radtelbotTest {
     @Test
     void test_searchWiki() {
         assertEquals("#REDIRECT [[Java (programming language)]]\n" +
-                " link:https://en.wikipedia.org/w/index.php?action=raw&title=Java_programming", bot.searchWiki("Java programming"));
+                " link:https://en.wikipedia.org/w/index.php?action=raw&title=Java_programming",
+                bot.searchWiki("Java programming"));
     }
 
 

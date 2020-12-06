@@ -6,12 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="radtelbot.com" />
         <module name="radtelebot" />
+        <module name="radtelbot.com" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="radtelbot.com" target="1.5" />
+      <module name="radtelbot.com" target="8" />
       <module name="radtelebot" target="8" />
     </bytecodeTargetLevel>
   </component>
