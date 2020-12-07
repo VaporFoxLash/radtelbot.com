@@ -31,12 +31,35 @@
             <artifactId>telegrambots</artifactId>
             <version>3.5</version>
         </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <!-- LOOK OUT: YOU SHOULD USE A NEWER VERSION! -->
+            <version>5.2.12.Final</version>
+        </dependency>
+        <dependency>
+            <!-- update Hibernate dependency on Javassist
+                    from 3.20.0 to 3.23.1 for Java 11 compatibility -->
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.23.1-GA</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.22</version>
+        </dependency>
+
 
 
     </dependencies>
