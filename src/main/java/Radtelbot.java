@@ -79,6 +79,7 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
         command_map.put(def, cmd);
     }
 
+
     /**
      * This method takes an array of commands and add them to the command_list arraylist.
      * @param cmd
@@ -88,6 +89,16 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
         Collections.addAll(command_list, cmd);
     }
 
+    @Override
+    public void getName(Update update, long chat_id) {
+        sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName());
+    }
+
+    @Override
+    public void getFullName(Update update, long chat_id) {
+        sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName()+" "
+                +update.getMessage().getFrom().getLastName());
+    }
 
     /**
      * Method for receiving messages.
@@ -127,14 +138,13 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
                         details.get(4));
                 break;
             case 1:
-                sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName());
+                getName(update, chat_id);
                 break;
             case 2:
                 sendMsg(update, chat_id, update.getMessage().getFrom().getLastName());
                 break;
             case 3:
-                sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName()+" "
-                        +update.getMessage().getFrom().getLastName());
+                getFullName(update, chat_id);
                 break;
             case 4:
                 triviaVariants(chat_id);
