@@ -22,6 +22,13 @@ Telegrambots, version 3.5
 
 ## <a name="Usage">Usage</a>
 Open the project with intellij IDEA, build and run it.
+## Commands
+* /start
+* /name
+* /lastname
+* /fullname
+* /wiki_search
+* /trivia
 
 
 ## <a name="Testing">Testing</a>
@@ -32,4 +39,4 @@ and you can see the result on terminal.
 
 ## <a name="References">References</a>
 # API
-  https://core.telegram.org/bots/api
+*  https://core.telegram.org/bots/api
