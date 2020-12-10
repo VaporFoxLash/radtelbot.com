@@ -27,6 +27,4 @@ class RadtelbotTest {
                 " link:https://en.wikipedia.org/w/index.php?action=raw&title=Java_programming",
                 bot.searchWiki("Java programming"));
     }
-
-
 }
