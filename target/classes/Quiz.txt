@@ -1,3 +1,0 @@
-Can constructor be inherited?, true, false, true
-Which of the following is Faster - StringBuilder or StringBuffer?, stringBuffer, stringBuilder, stringBuilder
-What is the default value of short variable?, 0.0, null, 0.0
