@@ -2,6 +2,7 @@
 ## Telegram bot
 This bot accepts commands from a user and give back a response or a quick 
 wikipedia search with a shortened description and a link for full details.
+A user can also play a Trivia game to test their knowledge.
 
 ## Index
 * [Cloning](#Clone)
@@ -22,6 +23,7 @@ Telegrambots, version 3.5
 
 ## <a name="Usage">Usage</a>
 Open the project with intellij IDEA, build and run it.
+Search @radtelbot on telegram and use the commands below to interact with the bot.
 ## Commands
 * /start
 * /name
