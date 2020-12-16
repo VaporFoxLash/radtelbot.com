@@ -5,11 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f5d17385-7c95-4b6b-aa26-d7929f74a11c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Quiz.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Commands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Quiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Quiz.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Radtelbot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Radtelbot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/RadtelbotTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/RadtelbotTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Trivia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Trivia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/MainClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/MainClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/PACKAGE_NAME/Quiz.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/PACKAGE_NAME/Trivia.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Quiz.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Quiz.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Radtelbot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Radtelbot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Trivia.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Trivia.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/myBotInterface.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/META-INF/radtelbot.com.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/META-INF/radtelebot.kotlin_module" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +63,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="myBotInterfaceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="radtelbot.com" />
       <option name="PACKAGE_NAME" value="" />
@@ -83,6 +103,9 @@
       <workItem from="1607345785204" duration="8416000" />
       <workItem from="1607421741078" duration="10504000" />
       <workItem from="1607514090476" duration="7589000" />
+      <workItem from="1607582411731" duration="1324000" />
+      <workItem from="1608079327628" duration="7108000" />
+      <workItem from="1608139768735" duration="10585000" />
     </task>
     <servers />
   </component>
