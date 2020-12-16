@@ -1,5 +1,6 @@
 import org.json.JSONObject;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -10,13 +11,13 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.util.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.URL;
+
+import static java.lang.Math.toIntExact;
 
 /**
  * Telegram bot
@@ -28,28 +29,24 @@ import java.net.URL;
 
 
 public class Radtelbot extends TelegramLongPollingBot implements Commands{
-
-    String[] quiz = { "",
-             "What is the default value of String variable?",
-            "What is the default value of Boolean variable?", "What is an immutable object?"};
-    String[][][] answers = {{{ "8 bit", "False", "null"}}};
-
-    Quiz[] quizObj = {
-            new Quiz("A progrmming language", "Russkey", "Blisp", "Java", "Java"),
-            new Quiz("What is the size of byte variable?", "8 bit", "", "", "")
-    };
-
+    int count = 0;
     /**
      * Method for creating a message and sending it.
      * @param chat_id chat id
      * @param str The String that you want to send as a message.
      */
     public synchronized void sendMsg(Update update, long chat_id, String str) {
-        SendMessage messag = new SendMessage() // Create a message object object
+        String call_data = update.getCallbackQuery().getData();
+        long message_id = update.getCallbackQuery().getMessage().getMessageId();
+
+
+        EditMessageText new_message = new EditMessageText()
                 .setChatId(chat_id)
+                .setMessageId(toIntExact(message_id))
                 .setText(str);
+
         try {
-            sendMessage(messag);
+            editMessageText(new_message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -100,109 +97,230 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
                 +update.getMessage().getFrom().getLastName());
     }
 
+
+//    public void quizButton(Update update) throws IOException {
+//        //update
+//        String call_data = update.getCallbackQuery().getData();
+//        long message_id = update.getCallbackQuery().getMessage().getMessageId();
+//        long chat_id = update.getCallbackQuery().getMessage().getChatId();
+//        int count = 0;
+//
+//        Quiz quiz = new Quiz();
+//
+//        String str = quiz.quizList().get(count);
+//        List<String> questions = new ArrayList<>();
+//        questions.addAll(Arrays.asList(str.split(", ")));
+//        quiz.question = questions.get(0);
+//        quiz.op1 = questions.get(1);
+//        quiz.op2 = questions.get(2);
+//        quiz.correct_answer = questions.get(3);
+//
+//        String squiz = questions.get(0);
+//        EditMessageText new_message = new EditMessageText()
+//                .setChatId(chat_id)
+//                .setMessageId(toIntExact(message_id))
+//                .setText(squiz);
+//        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+//        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+//        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+//        rowInline.add(new InlineKeyboardButton().setText(questions.get(1)).setCallbackData(questions.get(1)));
+//        rowInline.add(new InlineKeyboardButton().setText(questions.get(2)).setCallbackData(questions.get(2)));
+//        rowsInline.add(rowInline);
+//
+//        // Add it to the message
+//        markupInline.setKeyboard(rowsInline);
+//        new_message.setReplyMarkup(markupInline);
+//        try {
+//            editMessageText(new_message);
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+
     /**
      * Method for receiving messages.
      * @param update Contains a message from the user.
      */
     @Override
     public void onUpdateReceived(Update update) {
+        Quiz quiz = new Quiz();
 
-        String command = update.getMessage().getText();
+        String str = null;
+        try {
+            str = quiz.quizList().get(count);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<String> questions = new ArrayList<>();
+        questions.addAll(Arrays.asList(str.split(", ")));
+        quiz.question = questions.get(0);
+        quiz.op1 = questions.get(1);
+        quiz.op2 = questions.get(2);
+        quiz.correct_answer = questions.get(3);
 
-        SendMessage message = new SendMessage();
+        // We check if the update has a message and the message has text
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            String message_text = update.getMessage().getText();
+            long chat_id = update.getMessage().getChatId();
 
-        long chat_id = update.getMessage().getChatId();
+            addMap("For help", "/start");
+            addMap("Display your username>", "/name");
+            addMap("Display your fullname", "/fullname");
+            addMap("For wiki search", "/wiki_search");
+            addMap("To test your java and OOP knowledge", "/Trivia");
 
-        addMap("For help", "/start");
-        addMap("Display your username>", "/name");
-        addMap("Display your fullname", "/fullname");
-        addMap("For wiki search", "/wiki_search");
-        addMap("To test your java and OOP knowledge", "/Trivia");
+            String[] cmd = {"/start", "/name", "/lastname", "/fullname", "/Trivia", "/wiki_search",
+                    "Java", "OOP", "Polymorphism", "Inheritance", "Encapsulation", "Home"};
+            addCommand(cmd);
 
-        String[] cmd = {"/start", "/name", "/lastname", "/fullname", "/Trivia", "/wiki_search",
-                "Java", "OOP", "Polymorphism", "Inheritance", "Encapsulation", "Home"};
-        addCommand(cmd);
-
-//        System.out.println(command_list);
-        switch(command_list.indexOf(command)) {
-            case 0:
+            if (update.getMessage().getText().equals("/start")) {
                 ArrayList<String> details = new ArrayList<>();
                 for (Map.Entry<String, String> entry : command_map.entrySet()) {
                     details.add(entry.getKey() + " ----> " + entry.getValue());
                 }
-                sendMsg(update, chat_id, "To control the bot use the following commands: \n" +
-                        details.get(0)+"\n" +
-                        details.get(1)+"\n" +
-                        details.get(2)+"\n" +
-                        details.get(3)+"\n" +
-                        details.get(4));
-                break;
-            case 1:
-                getName(update, chat_id);
-                break;
-            case 2:
-                sendMsg(update, chat_id, update.getMessage().getFrom().getLastName());
-                break;
-            case 3:
-                getFullName(update, chat_id);
-                break;
-            case 4:
-                triviaVariants(chat_id);
-                break;
-            case 5:
-                wikiKeyBoard(chat_id);
-                break;
-            case 7:
-                System.out.println(command);
-                sendMsg(update, chat_id, searchWiki("Java programming"));
-                System.out.println(searchWiki("Java programming"));
-                break;
-            case 8:
-                System.out.println(command);
-                sendMsg(update, chat_id, searchWiki("Object-oriented programming"));
-                break;
-            case 9:
-                System.out.println(command);
-                sendMsg(update, chat_id, searchWiki("Polymorphism (computer science)"));
-                break;
-            case 10:
-                sendMsg(update, chat_id, searchWiki("Inheritance (object-oriented programming)"));
-                break;
-            case 11:
-                sendMsg(update, chat_id, searchWiki("Encapsulation (computer programming)"));
-                break;
-            default:
-                System.out.println(command);
-                sendMsg(update, chat_id, "Welcome, to get started type /start");
+                SendMessage message = new SendMessage() // Create a message object object
+                        .setChatId(chat_id)
+                        .setText("To control the bot use the following commands: \n" +
+                                details.get(0)+"\n" +
+                                details.get(1)+"\n" +
+                                details.get(2));
+                InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+                List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+                List<InlineKeyboardButton> rowInline = new ArrayList<>();
+                rowInline.add(new InlineKeyboardButton().setText("Wiki search").setCallbackData("wiki_search"));
+                rowInline.add(new InlineKeyboardButton().setText("Trivia").setCallbackData("trivia"));
+//                rowInline.add(new InlineKeyboardButton().setText("My Score").setCallbackData("score"));
+                // Set the keyboard to the markup
+                rowsInline.add(rowInline);
+                // Add it to the message
+                markupInline.setKeyboard(rowsInline);
+                message.setReplyMarkup(markupInline);
+                try {
+                    sendMessage(message); // Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            } else if (update.getMessage().getText().equals("true")){
+                sendMsg(update, chat_id, "Corr");
+            }
+
+        } else if (update.hasCallbackQuery()) {
+            // Set variables
+            String call_data = update.getCallbackQuery().getData();
+            long message_id = update.getCallbackQuery().getMessage().getMessageId();
+            long chat_id = update.getCallbackQuery().getMessage().getChatId();
+
+            if (call_data.equals("wiki_search")) {
+                String answer = "Select what to search below";
+                EditMessageText new_message = new EditMessageText()
+                        .setChatId(chat_id)
+                        .setMessageId(toIntExact(message_id))
+                        .setText(answer);
+                InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+                List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+                List<InlineKeyboardButton> rowInline = new ArrayList<>();
+                rowInline.add(new InlineKeyboardButton().setText("Java").setCallbackData("java"));
+                rowInline.add(new InlineKeyboardButton().setText("OOP").setCallbackData("OOP"));
+                rowInline.add(new InlineKeyboardButton().setText("Maven").setCallbackData("maven"));
+                rowsInline.add(rowInline);
+                // Add it to the message
+                markupInline.setKeyboard(rowsInline);
+                new_message.setReplyMarkup(markupInline);
+                try {
+                    editMessageText(new_message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }else if (call_data.equals("trivia")){
+                String squiz = questions.get(0);
+                EditMessageText new_message = new EditMessageText()
+                        .setChatId(chat_id)
+                        .setMessageId(toIntExact(message_id))
+                        .setText(squiz);
+                InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+                List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+                List<InlineKeyboardButton> rowInline = new ArrayList<>();
+                rowInline.add(new InlineKeyboardButton().setText(questions.get(1)).setCallbackData(questions.get(1)));
+                rowInline.add(new InlineKeyboardButton().setText(questions.get(2)).setCallbackData(questions.get(2)));
+                rowsInline.add(rowInline);
+
+                // Add it to the message
+                markupInline.setKeyboard(rowsInline);
+                new_message.setReplyMarkup(markupInline);
+                try {
+                    editMessageText(new_message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }else if (update.hasCallbackQuery()){
+                String quiz_call = update.getCallbackQuery().getData();
+                long message_idc = update.getCallbackQuery().getMessage().getMessageId();
+                long chat_idc = update.getCallbackQuery().getMessage().getChatId();
+
+                if (call_data.equals(quiz.correct_answer)) {
+                    String answers = "Correct";
+                    EditMessageText new_messages = new EditMessageText()
+                            .setChatId(chat_idc)
+                            .setMessageId(toIntExact(message_idc))
+                            .setText(answers);
+                    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+                    List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+                    List<InlineKeyboardButton> rowInline = new ArrayList<>();
+                    rowInline.add(new InlineKeyboardButton().setText("Continue").setCallbackData("trivia"));
+                    rowsInline.add(rowInline);
+                    // Add it to the message
+                    markupInline.setKeyboard(rowsInline);
+                    new_messages.setReplyMarkup(markupInline);
+                    try {
+                        editMessageText(new_messages);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    count++;
+                }
+//                if (quiz_call.equals(quiz.correct_answer)){
+//                    System.out.println("Woooj");
+//                    EditMessageText new_message = new EditMessageText()
+//                            .setChatId(chat_id)
+//                            .setMessageId(toIntExact(message_idc))
+//                            .setText("Correct!");
+//                    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+//                    List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+//                    List<InlineKeyboardButton> rowInline = new ArrayList<>();
+//                    rowInline.add(new InlineKeyboardButton().setText("Continue").setCallbackData("trivia"));
+//                    rowsInline.add(rowInline);
+//
+//                    // Add it to the message
+//                    markupInline.setKeyboard(rowsInline);
+//                    new_message.setReplyMarkup(markupInline);
+//                    count++;
+//                }
+            }
         }
-
-        message.setChatId(String.valueOf(update.getMessage().getChatId()));
-        command_list.clear();
-        command_map.clear();
-
     }
 
     public void triviaVariants(long chat_id){
-        SendMessage messag = new SendMessage() // Create a message object object
-                .setChatId(chat_id)
-                .setText("Question:\n"+quizObj[0].question);
-
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText(quizObj[0].op1).setCallbackData(quizObj[0].op1));
-        rowInline.add(new InlineKeyboardButton().setText(quizObj[0].op2).setCallbackData(quizObj[0].op2));
-        rowInline.add(new InlineKeyboardButton().setText(quizObj[0].op3).setCallbackData(quizObj[0].op3));
-        // Set the keyboard to the markup
-        rowsInline.add(rowInline);
-        // Add it to the message
-        markupInline.setKeyboard(rowsInline);
-        messag.setReplyMarkup(markupInline);
-        try {
-            execute(messag); // Sending our message object to user
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+//        SendMessage messag = new SendMessage() // Create a message object object
+//                .setChatId(chat_id)
+//                .setText("Question:\n"+quizObj[0].question);
+//
+//        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+//        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+//        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+//        rowInline.add(new InlineKeyboardButton().setText(quizObj[0].op1).setCallbackData(quizObj[0].op1));
+//        rowInline.add(new InlineKeyboardButton().setText(quizObj[0].op2).setCallbackData(quizObj[0].op2));
+//        rowInline.add(new InlineKeyboardButton().setText(quizObj[0].op3).setCallbackData(quizObj[0].op3));
+//        // Set the keyboard to the markup
+//        rowsInline.add(rowInline);
+//        // Add it to the message
+//        markupInline.setKeyboard(rowsInline);
+//        messag.setReplyMarkup(markupInline);
+//        try {
+//            execute(messag); // Sending our message object to user
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void wikiKeyBoard(long chat_id) {
