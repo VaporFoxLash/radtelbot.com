@@ -32,24 +32,22 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
     int count = 0;
     /**
      * Method for creating a message and sending it.
-     * @param chat_id chat id
      * @param str The String that you want to send as a message.
      */
-    public synchronized void sendMsg(Update update, long chat_id, String str) {
+    public synchronized EditMessageText sendMsg(Update update, String str) {
         String call_data = update.getCallbackQuery().getData();
+        long chat_id = update.getMessage().getChatId();
         long message_id = update.getCallbackQuery().getMessage().getMessageId();
-
-
         EditMessageText new_message = new EditMessageText()
                 .setChatId(chat_id)
                 .setMessageId(toIntExact(message_id))
                 .setText(str);
-
         try {
             editMessageText(new_message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+        return new_message;
     }
 
 
@@ -88,12 +86,12 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
 
     @Override
     public void getName(Update update, long chat_id) {
-        sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName());
+        sendMsg(update, update.getMessage().getFrom().getFirstName());
     }
 
     @Override
     public void getFullName(Update update, long chat_id) {
-        sendMsg(update, chat_id, update.getMessage().getFrom().getFirstName()+" "
+        sendMsg(update, update.getMessage().getFrom().getFirstName()+" "
                 +update.getMessage().getFrom().getLastName());
     }
 
@@ -190,7 +188,6 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
                 List<InlineKeyboardButton> rowInline = new ArrayList<>();
                 rowInline.add(new InlineKeyboardButton().setText("Wiki search").setCallbackData("wiki_search"));
                 rowInline.add(new InlineKeyboardButton().setText("Trivia").setCallbackData("trivia"));
-//                rowInline.add(new InlineKeyboardButton().setText("My Score").setCallbackData("score"));
                 // Set the keyboard to the markup
                 rowsInline.add(rowInline);
                 // Add it to the message
@@ -201,8 +198,8 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-            } else if (update.getMessage().getText().equals("true")){
-                sendMsg(update, chat_id, "Corr");
+            } else if (update.getMessage().getText().equals("/name")){
+                getName(update, chat_id);
             }
 
         } else if (update.hasCallbackQuery()) {
@@ -213,10 +210,7 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
 
             if (call_data.equals("wiki_search")) {
                 String answer = "Select what to search below";
-                EditMessageText new_message = new EditMessageText()
-                        .setChatId(chat_id)
-                        .setMessageId(toIntExact(message_id))
-                        .setText(answer);
+                EditMessageText msg = sendMsg(update, answer);
                 InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
                 List<InlineKeyboardButton> rowInline = new ArrayList<>();
@@ -226,13 +220,9 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
                 rowsInline.add(rowInline);
                 // Add it to the message
                 markupInline.setKeyboard(rowsInline);
-                new_message.setReplyMarkup(markupInline);
-                try {
-                    editMessageText(new_message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }else if (call_data.equals("trivia")){
+                msg.setReplyMarkup(markupInline);
+
+            }else if (call_data.equals("trivia") && count<questions.size()){
                 String squiz = questions.get(0);
                 EditMessageText new_message = new EditMessageText()
                         .setChatId(chat_id)
@@ -278,24 +268,27 @@ public class Radtelbot extends TelegramLongPollingBot implements Commands{
                         e.printStackTrace();
                     }
                     count++;
+                }else if (!call_data.equals(quiz.correct_answer) && questions.contains(call_data)){
+                    String answers = "Wrong Answer, the correct answer is "+quiz.correct_answer;
+                    EditMessageText new_messag = new EditMessageText()
+                            .setChatId(chat_idc)
+                            .setMessageId(toIntExact(message_idc))
+                            .setText(answers);
+                    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+                    List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+                    List<InlineKeyboardButton> rowInline = new ArrayList<>();
+                    rowInline.add(new InlineKeyboardButton().setText("Continue").setCallbackData("trivia"));
+                    rowsInline.add(rowInline);
+                    // Add it to the message
+                    markupInline.setKeyboard(rowsInline);
+                    new_messag.setReplyMarkup(markupInline);
+                    try {
+                        editMessageText(new_messag);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    count++;
                 }
-//                if (quiz_call.equals(quiz.correct_answer)){
-//                    System.out.println("Woooj");
-//                    EditMessageText new_message = new EditMessageText()
-//                            .setChatId(chat_id)
-//                            .setMessageId(toIntExact(message_idc))
-//                            .setText("Correct!");
-//                    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-//                    List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-//                    List<InlineKeyboardButton> rowInline = new ArrayList<>();
-//                    rowInline.add(new InlineKeyboardButton().setText("Continue").setCallbackData("trivia"));
-//                    rowsInline.add(rowInline);
-//
-//                    // Add it to the message
-//                    markupInline.setKeyboard(rowsInline);
-//                    new_message.setReplyMarkup(markupInline);
-//                    count++;
-//                }
             }
         }
     }
